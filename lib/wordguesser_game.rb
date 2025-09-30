@@ -59,8 +59,9 @@ class WordGuesserGame
     require 'uri'
     require 'net/http'
     uri = URI('http://randomword.saasbook.info/RandomWord')
-    Net::HTTP.new('randomword.saasbook.info').start do |http|
-      return http.post(uri, "").body
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      response = http.post(uri.request_uri, "")
+      return response.body
     end
   end
 end
